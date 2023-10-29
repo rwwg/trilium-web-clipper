@@ -36,18 +36,23 @@ $saveTabsButton.on("click", () => sendMessage({name: 'save-tabs'}));
 const $saveLinkWithNoteWrapper = $("#save-link-with-note-wrapper");
 const $textNote = $("#save-link-with-note-textarea");
 const $keepTitle = $("#keep-title-checkbox");
+const $urlToTextNote = new Map();
 
 $textNote.on('keypress', function (event) {
     if ((event.which === 10 || event.which === 13) && event.ctrlKey) {
         saveLinkWithNote();
         return false;
     }
+    $urlToTextNote.set(window.location.href, $textNote.val())
 
     return true;
 });
 
 $("#save-link-with-note-button").on("click", () => {
     $saveLinkWithNoteWrapper.show();
+    if ($urlToTextNote.has(window.location.href)) {
+        $textNote.val($urlToTextNote.get(window.location.href))
+    }
 
     $textNote[0].focus();
 });
